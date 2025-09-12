@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nature Gallery</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #f1f8e9);
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      color: #2e7d32;
+      font-size: 2rem;
+    }
+
+    .gallery {
+      position: relative;
+      max-width: 90%;
+      margin: auto;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      opacity: 1;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.03);
+    }
+
+    .nav-buttons {
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .nav-buttons button {
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(to right, #43cea2, #185a9d);
+      color: white;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .nav-buttons button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      .nav-buttons button {
+        font-size: 14px;
+        padding: 10px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 22px;
+      }
+
+      .nav-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .nav-buttons button {
+        width: 80%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Nature Gallery: Animals & Plants</h1>
+
+  <div class="gallery" id="gallery">
+    <img id="galleryImage" src="https://images.unsplash.com/photo-1601758123927-1961c6d9f8f9?auto=format&fit=crop&w=800&q=80" alt="Tiger in forest" />
+  </div>
+
+  <div class="nav-buttons">
+    <button onclick="prevImage()">← Previous</button>
+    <button onclick="nextImage()">Next →</button>
+  </div>
+
+  <script>
+    const images = [
+      "https://images.unsplash.com/photo-1601758123927-1961c6d9f8f9?auto=format&fit=crop&w=800&q=80", // Tiger
+      "https://images.unsplash.com/photo-1595433562696-7b5c1e3b1f5e?auto=format&fit=crop&w=800&q=80", // Elephant
+      "https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?auto=format&fit=crop&w=800&q=80", // Parrot
+      "https://images.unsplash.com/photo-1504208434309-cb69f4fe52b0?auto=format&fit=crop&w=800&q=80", // Fox
+      "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=800&q=80", // Houseplant
+      "https://images.unsplash.com/photo-1524594157361-1e8a1c0f3e1b?auto=format&fit=crop&w=800&q=80", // Tropical leaves
+      "https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=800&q=80", // Succulent
+      "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=800&q=80"  // Fern
+    ];
+
+    let currentIndex = 0;
+    const imgElement = document.getElementById("galleryImage");
+
+    function showImage(index) {
+      imgElement.style.opacity = 0;
+      setTimeout(() => {
+        imgElement.src = images[index];
+        imgElement.style.opacity = 1;
+      }, 300);
+    }
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % images.length;
+      showImage(currentIndex);
+    }
+
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      showImage(currentIndex);
+    }
+
+    // Auto-play every 5 seconds
+    setInterval(nextImage, 5000);
+
+    // Swipe gesture for mobile
+    let startX = 0;
+    const gallery = document.getElementById("gallery");
+
+    gallery.addEventListener("touchstart", (e) => {
+      startX = e.touches[0].clientX;
+    });
+
+    gallery.addEventListener("touchend", (e) => {
+      const endX = e.changedTouches[0].clientX;
+      if (startX - endX > 50) {
+        nextImage(); // swipe left
+      } else if (endX - startX > 50) {
+        prevImage(); // swipe right
+      }
+    });
+
+    // Keyboard navigation
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") nextImage();
+      if (e.key === "ArrowLeft") prevImage();
+    });
+  </script>
+
+</body>
+</html>
